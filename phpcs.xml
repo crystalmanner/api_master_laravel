@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="FreshPlatform">
+    <rule ref="PSR1"/>
+    <rule ref="PSR2"/>
+    <file>src/</file>
+    <file>tests/</file>
+    <exclude-pattern>.report</exclude-pattern>
+    <exclude-pattern>vendor</exclude-pattern>
+    <exclude-pattern>storage/</exclude-pattern>
+    <rule ref="Squiz.PHP.CommentedOutCode">
+        <properties>
+            <property name="maxPercentage" value="35"/>
+        </properties>
+    </rule>
+</ruleset>

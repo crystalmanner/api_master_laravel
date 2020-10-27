@@ -1,0 +1,23 @@
+<?php
+/*
+ * This document has been generated with
+ * https://mlocati.github.io/php-cs-fixer-configurator/?version=2.14#configurator
+ * you can change this configuration by importing this file.
+ */
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@PSR1' => true,
+        '@PSR2' => true,
+        '@PhpCsFixer' => false,
+        // Concatenation should be spaced according configuration.
+        'concat_space' => ['spacing' => 'one'],
+    ])
+    ->setFinder(PhpCsFixer\Finder::create()
+        ->exclude('vendor')
+        ->exclude('resources')
+        ->exclude('node_modules')
+        ->exclude('.storybook')
+        ->exclude('tests')
+        ->in(__DIR__)
+    );

@@ -1,0 +1,71 @@
+# CircleCI 2.0 configuration file
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+
+    docker:
+      # specify the version you desire here
+      - image: laratools/ci:7.3
+
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 6c:73:cd:13:af:b6:b4:86:48:72:9f:00:d0:6e:74:e8
+
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: COMPOSER_MEMORY_LIMIT=2G composer install -n -o --profile
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+
+  test_php:
+    working_directory: ~/repo
+
+    docker:
+      - image: laratools/ci:7.3
+
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 6c:73:cd:13:af:b6:b4:86:48:72:9f:00:d0:6e:74:e8
+
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: Information
+          command: |
+            php --version
+            composer --version
+      - run:
+          name: Lint PHP
+          command: composer lint
+
+      - run:
+          name: Unit Test with Code Coverage
+          command: composer test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test_php:
+          requires:
+            - build
